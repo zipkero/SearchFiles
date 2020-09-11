@@ -1,0 +1,26 @@
+{ "widget": {
+    "debug": "on",
+    "창문": {
+        "title": "샘플 Konfabulator 위젯", 
+        "name": "main_window", 
+        "width": 500, 
+        "height": 500
+    }, 
+    "이미지": {
+        "src": "이미지 /Sun.png",
+        "name": "sun1", 
+        "hOffset": 250, 
+        "vOffset": 250, 
+        "alignment": "center"
+    }, 
+    "텍스트": {
+        "data": "여기를 클릭하십시오",
+        "크기": 36,
+        "style": "bold", 
+        "name": "text1", 
+        "hOffset": 250, 
+        "vOffset": 100, 
+        "alignment": "center",
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    }
+}}   
