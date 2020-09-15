@@ -14,7 +14,20 @@ class SearchFiles {
             filters
         } = options || {};
 
-        extensions = extensions || [];
+        extensions = extensions || ["js"];
+        filters = filters || [];
+        const regexpInfo = {
+            ext: '',
+            body: '',
+            // or 조건 /.*([.](body|body|body))$/
+            // and 조건 /(?=.*body)(?=.*body)/gm            
+        }
+
+        const extFilter = extensions.reduce((arr, cur, idx) => `${arr}${idx > 0 ? "|" : ""}${cur}`, "")
+        regexpInfo.ext = `.*([.](${extFilter}))$`;
+
+        console.log(regexpInfo);
+
         mapFn = mapFn || (({ dirent, dirPath, ext }) => {
             return { name: dirent.name, path: path.resolve(dirPath, dirent.name), ext }
         })
@@ -28,30 +41,25 @@ class SearchFiles {
                     result = result.concat(await _getFiles(fullPath));
                 } else {
                     let ext = path.extname(fullPath)
-                    if (extensions.length > 0) {
-                        if (extensions.includes(ext)) {
+                    let regex = new RegExp(regexpInfo.ext);
+                    if (regex.test(ext) === true) {
+                        //TODO - 데이터 검색 필터 추가 예정
+                        if (filters.length > 0) {
+                            result.push(mapFn({ dirent, dirPath, ext }))
+                        } else {
                             result.push(mapFn({ dirent, dirPath, ext }))
                         }
                     } else {
-                        result.push(mapFn({ dirent, dirPath, ext }))
+                        if (filters.length > 0) {
+                            result.push(mapFn({ dirent, dirPath, ext }))
+                        }
                     }
                 }
             }
             return result;
         }
 
-        return await _getFiles(targetPath, extensions, map);
-    }
-
-    async getFileRead(targetPath) {
-        for (const fileInfo of this.result) {
-            const data = await promises.readFile(fileInfo.path, 'utf-8')
-            console.log(data);
-        }
-    }
-
-    async getFileRead(targetPath) {
-
+        return await _getFiles(targetPath);
     }
 }
 

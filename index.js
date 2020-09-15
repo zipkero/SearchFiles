@@ -2,10 +2,10 @@ import SearchFiles from './SearchFiles.js';
 const sf = new SearchFiles();
 
 const getFiles = async () => {
-    const fileList = await sf.search("./pages", {
-        extensions: [".js"],
+    const fileList = await sf.search("./pages", {        
         mapFn: null,
-        regexFilters: []
+        extensions: ["cs"],
+        filters: []
     })
     console.log(fileList);
 }
